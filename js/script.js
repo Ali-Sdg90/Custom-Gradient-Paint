@@ -2,7 +2,6 @@ const canvas = document.getElementById("painting-canvas");
 
 let spreadRadius = 10;
 let canvasSize = 30; // - 2 * spreadRadius;
-let maxSpreadRadius = canvasSize / 2;
 let colorRGB = [232, 62, 62];
 
 document.documentElement.style.setProperty(
@@ -14,24 +13,30 @@ document.documentElement.style.setProperty(
     `repeat(${canvasSize}, 1fr)`
 );
 
-for (let i = 0; i < canvasSize * canvasSize; i++) {
-    const addBlock = document.createElement("div");
-    // addBlock.textContent = i; // toggle numbers
-    addBlock.style.background = "rgba(0, 0, 0, 0)";
-    canvas.appendChild(addBlock);
-}
+let blocks = document.querySelectorAll("#painting-canvas div");
 
-const blocks = document.querySelectorAll("#painting-canvas div");
-
-for (let i = 0; i < canvasSize * canvasSize; i++) {
-    if (i < canvasSize * spreadRadius) {
-        blocks[i].style.display = "none";
-    } else {
-        blocks[i].addEventListener("click", () => {
-            spreadColor(i);
-        });
+const createGround = () => {
+    for (let i = 0; i < canvasSize * canvasSize; i++) {
+        const addBlock = document.createElement("div");
+        // addBlock.textContent = i; // toggle numbers
+        addBlock.style.background = "rgba(0, 0, 0, 0)";
+        canvas.appendChild(addBlock);
     }
-}
+
+    blocks = document.querySelectorAll("#painting-canvas div");
+
+    for (let i = 0; i < canvasSize * canvasSize; i++) {
+        if (i < canvasSize * spreadRadius) {
+            blocks[i].style.display = "none";
+        } else {
+            blocks[i].addEventListener("click", () => {
+                spreadColor(i);
+            });
+        }
+    }
+};
+
+createGround();
 
 // let rowPriority = [1, 2, 3, 4, 5 ,4, 3, 2, 1,
 //                       1, 2, 3, 4, 3, 2, 1,
@@ -120,8 +125,7 @@ const settingMenu = document.getElementById("setting__menu");
 let settingClicked = 0;
 
 document.getElementById("setting-btn").addEventListener("click", function () {
-    console.log("click");
-    if (settingClicked++ % 2 == 0) {
+    if (settingClicked++ % 2 === 0) {
         settingPage.style.transition = "opacity 0.3s";
         settingPage.style.display = "grid";
         settingMenu.style.zIndex = "0";
@@ -138,4 +142,63 @@ document.getElementById("setting-btn").addEventListener("click", function () {
     document.getElementById("setting-btn").style.transform = `rotate(${
         settingClicked * 90
     }deg)`;
+});
+
+const canvasSizeInput = document.getElementById("setting__menu__canvas-size");
+const canvasColorInput = document.getElementById("setting__menu__canvas-color");
+const spreadRadiusInput = document.getElementById(
+    "setting__menu__spread-radius"
+);
+const spreadRadiusValue = document.getElementById(
+    "setting__menu__spread-radius__value"
+);
+const showBordersInput = document.getElementById("setting__menu__show-borders");
+const showNumbersInput = document.getElementById("setting__menu__show-numbers");
+const applySetting = document.getElementById("setting__menu__apply");
+
+canvasSizeInput.value = canvasSize;
+canvasColorInput.value = "#e83e3e";
+spreadRadiusInput.max = canvasSizeInput.value / 2;
+spreadRadiusInput.value = spreadRadius
+spreadRadiusValue.value = spreadRadius;
+
+
+const hexToRgb = (hex) =>
+    hex
+        .replace(
+            /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
+            (m, r, g, b) => "#" + r + r + g + g + b + b
+        )
+        .substring(1)
+        .match(/.{2}/g)
+        .map((x) => parseInt(x, 16));
+
+applySetting.addEventListener("click", () => {
+    console.log(canvasSizeInput.value);
+    console.log(`rgb(${hexToRgb(canvasColorInput.value).join(", ")})`);
+    console.log(hexToRgb(canvasColorInput.value));
+    console.log(spreadRadiusInput.value);
+    console.log(showBordersInput.checked);
+    console.log(showNumbersInput.checked);
+
+    canvasSize = canvasSizeInput.value;
+    document.documentElement.style.setProperty(
+        "--blockSize",
+        `${100 / canvasSize}vw`
+    );
+    document.documentElement.style.setProperty(
+        "--gridTemplate",
+        `repeat(${canvasSize}, 1fr)`
+    );
+    createGround();
+    colorRGB = hexToRgb(canvasColorInput.value);
+    spreadRadius = spreadRadiusInput.value;
+});
+
+spreadRadiusInput.addEventListener("input", () => {
+    spreadRadiusValue.value = spreadRadiusInput.value;
+});
+
+canvasSizeInput.addEventListener("change", () => {
+    spreadRadiusInput.max = canvasSizeInput.value / 2;
 });
