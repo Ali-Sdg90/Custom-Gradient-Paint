@@ -1,8 +1,17 @@
 const canvas = document.getElementById("painting-canvas");
 
-let canvasSize = 20; // => 20 - 2 * spreadRadius
-let spreadRadius = 4;
+let canvasSize = 200; // => 20 - 2 * spreadRadius
+let spreadRadius = 6;
 let colorRGB = [232, 62, 62];
+
+document.documentElement.style.setProperty(
+    "--blockSize",
+    `${100 / canvasSize}vw`
+);
+document.documentElement.style.setProperty(
+    "--gridTemplate",
+    `repeat(${canvasSize}, 1fr)`
+);
 
 for (let i = 0; i < canvasSize * canvasSize; i++) {
     const addBlock = document.createElement("div");
@@ -14,8 +23,8 @@ for (let i = 0; i < canvasSize * canvasSize; i++) {
 const blocks = document.querySelectorAll("#painting-canvas div");
 
 for (let i = 0; i < canvasSize * canvasSize; i++) {
-    blocks[i].addEventListener("click", () => {
-        console.log(blocks[i].textContent);
+    blocks[i].addEventListener("mouseover", () => {
+        // console.log(blocks[i].textContent);
 
         spreadColor(i);
     });
@@ -51,7 +60,7 @@ for (let direction = -1; direction <= 1; direction += 2) {
     }
 }
 
-console.log(priorityArray);
+// console.log(priorityArray);
 const spreadColor = (target) => {
     let blockCounter = 0;
     for (let direction = -1; direction <= 1; direction += 2) {
@@ -67,7 +76,7 @@ const spreadColor = (target) => {
                             blockBackground.lastIndexOf(")")
                         )
                     );
-                    console.log(blockAdrs, blockAlphaValue);
+                    // console.log(blockAdrs, blockAlphaValue);
 
                     blocks[blockAdrs].style.background = `rgba(${
                         colorRGB[0]

@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+:root {
+  --blockSize: 5vw;
+  --gridTemplate: repeat(20, 1fr);
+}
+
 body {
   background-color: #333;
   width: 100%;
@@ -18,17 +23,15 @@ body {
 
 #painting-canvas {
   display: grid;
-  grid-template-columns: repeat(20, 1fr);
+  grid-template-columns: var(--gridTemplate);
 }
 #painting-canvas div {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  width: 5vw;
-  height: 5vw;
+  width: var(--blockSize);
+  height: var(--blockSize);
   cursor: crosshair;
+  transition: background-color 0.2s;
   font-size: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: background-color 0.2s;
-  background-color: rgba(20, 20, 20, 0.9);
 }/*# sourceMappingURL=style.css.map */
