@@ -1,0 +1,33 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #333;
+  width: 100%;
+  height: 100vh;
+  color: white;
+  font-size: 5px;
+}
+
+::selection {
+  background-color: transparent;
+}
+
+#painting-canvas {
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+}
+#painting-canvas div {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 5vw;
+  height: 5vw;
+  cursor: crosshair;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.2s;
+}/*# sourceMappingURL=style.css.map */
