@@ -14,46 +14,83 @@
         </abbr>
         <div id="setting">
             <div id="setting__menu">
-                <div>Setting</div>
+                <div>- Setting -</div>
                 <fieldset>
-                    <label for="setting__menu__canvas-size">Canvas Size:</label>
-                    <input
-                        type="number"
-                        name="setting__menu__canvas-size"
-                        id="setting__menu__canvas-size"
-                        autocomplete="off"
-                        step="1"
-                    />
+                    <div>
+                        <label for="setting__menu__canvas-size"
+                            >Canvas Size :</label
+                        >
+                        <input
+                            type="number"
+                            name="setting__menu__canvas-size"
+                            id="setting__menu__canvas-size"
+                            autocomplete="off"
+                            step="1"
+                        />
+                    </div>
 
-                    <label for="setting__menu__canvas-color">Color:</label>
-                    <input
-                        type="color"
-                        name="setting__menu__canvas-color"
-                        id="setting__menu__canvas-color"
-                    />
+                    <div>
+                        <label for="setting__menu__canvas-color">Color :</label>
+                        <input
+                            type="color"
+                            name="setting__menu__canvas-color"
+                            id="setting__menu__canvas-color"
+                        />
+                    </div>
 
-                    <label for="setting__menu__spread-radius">Spread Radius:</label>
-                    <input
-                        type="range"
-                        name="setting__menu__spread-radius"
-                        id="setting__menu__spread-radius"
-                    />
+                    <div>
+                        <label for="setting__menu__spread-radius"
+                            >Spread Radius :</label
+                        >
+                        <input
+                            type="range"
+                            name="setting__menu__spread-radius"
+                            id="setting__menu__spread-radius"
+                        />
+                        <input
+                            type="text"
+                            name="setting__menu__spread-radius__value"
+                            id="setting__menu__spread-radius__value"
+                            disabled
+                        />
+                    </div>
 
-                    <label for="setting__menu__show-borders">Show Borders:</label>
-                    <input
-                        type="checkbox"
-                        name="setting__menu__show-borders"
-                        id="setting__menu__show-borders"
-                    />
-                    
-                    <label for="setting__menu__show-numbers">Show Numbers:</label>
-                    <input
-                        type="checkbox"
-                        name="setting__menu__show-numbers"
-                        id="setting__menu__show-numbers"
-                    />
+                    <div>
+                        <label for="setting__menu__show-borders"
+                            >Show Borders :</label
+                        >
+                        <input
+                            type="checkbox"
+                            name="setting__menu__show-borders"
+                            id="setting__menu__show-borders"
+                        />
+                    </div>
 
-                    <input type="submit">
+                    <div>
+                        <label for="setting__menu__show-numbers"
+                            >Show Numbers :</label
+                        >
+                        <input
+                            type="checkbox"
+                            name="setting__menu__show-numbers"
+                            id="setting__menu__show-numbers"
+                        />
+                    </div>
+
+                    <!-- click or draw -->
+
+                    <!-- <div>
+                        <label for="setting__menu__show-numbers"
+                            >Show Numbers :</label
+                        >
+                        <input
+                            type="checkbox"
+                            name="setting__menu__show-numbers"
+                            id="setting__menu__show-numbers"
+                        />
+                    </div> -->
+
+                    <button id="setting__menu__apply">Apply</button>
                 </fieldset>
             </div>
         </div>

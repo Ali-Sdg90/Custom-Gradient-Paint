@@ -114,4 +114,28 @@ const spreadColor = (target) => {
     }
 };
 
-const blockOpacity = () => {};
+const settingPage = document.getElementById("setting");
+const settingMenu = document.getElementById("setting__menu");
+
+let settingClicked = 0;
+
+document.getElementById("setting-btn").addEventListener("click", function () {
+    console.log("click");
+    if (settingClicked++ % 2 == 0) {
+        settingPage.style.transition = "opacity 0.3s";
+        settingPage.style.display = "grid";
+        settingMenu.style.zIndex = "0";
+        setTimeout(() => {
+            settingPage.style.opacity = "1";
+        }, 0);
+    } else {
+        setTimeout(() => {
+            settingPage.style.display = "none";
+            settingMenu.style.zIndex = "3";
+        }, 300);
+        settingPage.style.opacity = "0";
+    }
+    document.getElementById("setting-btn").style.transform = `rotate(${
+        settingClicked * 90
+    }deg)`;
+});
