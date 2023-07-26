@@ -6,7 +6,8 @@ let colorRGB = [232, 62, 62];
 
 for (let i = 0; i < canvasSize * canvasSize; i++) {
     const addBlock = document.createElement("div");
-    addBlock.textContent = i;
+    // addBlock.textContent = i; // toggle numbers
+    addBlock.style.background = "rgba(0, 0, 0, 0)";
     canvas.appendChild(addBlock);
 }
 
@@ -26,15 +27,23 @@ for (let i = 0; i < canvasSize * canvasSize; i++) {
 //                             1, 2, 1,
 //                                1];
 
+const pushToPriorityArray = (value, i) => {
+    if (i === 0) {
+        priorityArray.push(value / 2);
+    } else {
+        priorityArray.push(value);
+    }
+};
+
 let priorityArray = [];
 for (let direction = -1; direction <= 1; direction += 2) {
     let MaxPriority = spreadRadius + 1;
     for (let i = 0; i <= spreadRadius + 1; i++) {
         for (let j = 1; j <= MaxPriority; j++) {
-            priorityArray.push(j / (spreadRadius + 1));
+            pushToPriorityArray(j / (spreadRadius + 1), i);
             if (j === MaxPriority) {
                 for (let k = MaxPriority - 1; k >= 1; k--) {
-                    priorityArray.push(k / (spreadRadius + 1));
+                    pushToPriorityArray(k / (spreadRadius + 1), i);
                 }
             }
         }
@@ -50,25 +59,26 @@ const spreadColor = (target) => {
             for (let j = i; j < spreadRadius * 2 + 1 - i; j++) {
                 const blockAdrs =
                     target - spreadRadius + j - i * canvasSize * direction;
-                // console.log("->", blockAdrs);
                 try {
-                    const currentBackground = blocks[
-                        blockAdrs
-                    ].style.background
-                    const currentAlpha = currentBackground.split(",")
-                    console.log(blockAdrs,currentAlpha);
+                    const blockBackground = blocks[blockAdrs].style.background;
+                    const blockAlphaValue = parseFloat(
+                        blockBackground.substring(
+                            blockBackground.lastIndexOf(",") + 1,
+                            blockBackground.lastIndexOf(")")
+                        )
+                    );
+                    console.log(blockAdrs, blockAlphaValue);
 
                     blocks[blockAdrs].style.background = `rgba(${
                         colorRGB[0]
                     }, ${colorRGB[1]}, ${colorRGB[2]}, ${
-                        priorityArray[blockCounter++] + currentAlpha
+                        priorityArray[blockCounter] + blockAlphaValue
                     })`;
+                    blockCounter++;
                 } catch (error) {}
             }
         }
     }
-
-    // blocks[target].style.background = "blue";
 };
 
 const blockOpacity = () => {};
