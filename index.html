@@ -9,6 +9,54 @@
     </head>
     <body>
         <div id="painting-canvas"></div>
+        <abbr id="setting-btn" title="Setting">
+            <img src="Assets/setting.svg" alt="Setting-icon" />
+        </abbr>
+        <div id="setting">
+            <div id="setting__menu">
+                <div>Setting</div>
+                <fieldset>
+                    <label for="setting__menu__canvas-size">Canvas Size:</label>
+                    <input
+                        type="number"
+                        name="setting__menu__canvas-size"
+                        id="setting__menu__canvas-size"
+                        autocomplete="off"
+                        step="1"
+                    />
+
+                    <label for="setting__menu__canvas-color">Color:</label>
+                    <input
+                        type="color"
+                        name="setting__menu__canvas-color"
+                        id="setting__menu__canvas-color"
+                    />
+
+                    <label for="setting__menu__spread-radius">Spread Radius:</label>
+                    <input
+                        type="range"
+                        name="setting__menu__spread-radius"
+                        id="setting__menu__spread-radius"
+                    />
+
+                    <label for="setting__menu__show-borders">Show Borders:</label>
+                    <input
+                        type="checkbox"
+                        name="setting__menu__show-borders"
+                        id="setting__menu__show-borders"
+                    />
+                    
+                    <label for="setting__menu__show-numbers">Show Numbers:</label>
+                    <input
+                        type="checkbox"
+                        name="setting__menu__show-numbers"
+                        id="setting__menu__show-numbers"
+                    />
+
+                    <input type="submit">
+                </fieldset>
+            </div>
+        </div>
         <script src="js/script.js"></script>
     </body>
 </html>

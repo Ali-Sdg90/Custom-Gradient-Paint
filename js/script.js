@@ -1,7 +1,8 @@
 const canvas = document.getElementById("painting-canvas");
 
-let spreadRadius = 4;
-let canvasSize = 20; // - 2 * spreadRadius;
+let spreadRadius = 10;
+let canvasSize = 30; // - 2 * spreadRadius;
+let maxSpreadRadius = canvasSize / 2;
 let colorRGB = [232, 62, 62];
 
 document.documentElement.style.setProperty(
@@ -15,7 +16,7 @@ document.documentElement.style.setProperty(
 
 for (let i = 0; i < canvasSize * canvasSize; i++) {
     const addBlock = document.createElement("div");
-    addBlock.textContent = i; // toggle numbers
+    // addBlock.textContent = i; // toggle numbers
     addBlock.style.background = "rgba(0, 0, 0, 0)";
     canvas.appendChild(addBlock);
 }
@@ -23,9 +24,13 @@ for (let i = 0; i < canvasSize * canvasSize; i++) {
 const blocks = document.querySelectorAll("#painting-canvas div");
 
 for (let i = 0; i < canvasSize * canvasSize; i++) {
-    blocks[i].addEventListener("click", () => {
-        spreadColor(i);
-    });
+    if (i < canvasSize * spreadRadius) {
+        blocks[i].style.display = "none";
+    } else {
+        blocks[i].addEventListener("click", () => {
+            spreadColor(i);
+        });
+    }
 }
 
 // let rowPriority = [1, 2, 3, 4, 5 ,4, 3, 2, 1,
