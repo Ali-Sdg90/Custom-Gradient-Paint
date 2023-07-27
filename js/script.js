@@ -1,17 +1,18 @@
-const canvas = document.getElementById("painting-canvas");
+const canvas = document.querySelector(".painting-canvas");
 
 let spreadRadius = 4;
 let canvasSizeX = 20; // - 2 * spreadRadius;
 let colorRGB = [232, 62, 62];
 
-let blocks = document.querySelectorAll("#painting-canvas div");
+let showNumbers = false;
+
+let blocks = document.querySelectorAll(".painting-canvas div");
+
+let blockCounter = 0;
 
 let canvasSizeY = Math.ceil(
     window.innerHeight / (window.innerWidth / canvasSizeX)
 );
-let numberYblocks = canvasSizeY;
-console.log("Y:", numberYblocks);
-
 document.documentElement.style.setProperty(
     "--blockSize",
     `${100 / canvasSizeX}vw`
@@ -21,92 +22,51 @@ document.documentElement.style.setProperty(
     `repeat(${canvasSizeX}, 1fr)`
 );
 
-const blockClickHandler = (target) => {
-    spreadColor(target);
-    console.log("CLICKKK");
-};
-
-let errorCounter = 0;
-
 const defineBlocks = (startPoint, endPoint) => {
     try {
-        blocks = document.querySelectorAll("#painting-canvas div");
+        blocks = document.querySelectorAll(".painting-canvas div");
 
-        console.clear();
-        console.log(canvasSizeX * (canvasSizeY + spreadRadius));
+        // console.clear();
+        // console.log(canvasSizeX * (canvasSizeY + spreadRadius));
 
         for (let i = startPoint; i < endPoint; i++) {
             if (i < canvasSizeX * spreadRadius) {
                 blocks[i].style.display = "none";
             } else {
-                if (!blocks[i].hasEventListener) {
-                    console.log("IN");
-                    // blocks[i].removeEventListener("click", blockClickHandler);
-                    blocks[i].addEventListener("click", () =>
-                        blockClickHandler(i)
-                    );
-                }
+                if (showNumbers) blocks[i].textContent = ++blockCounter; // toggle numbers
+                blocks[i].style.fontSize = `${30 / canvasSizeX}vw`; // toggle numbers
+                blocks[i].addEventListener("click", () => spreadColor(i));
             }
         }
-        console.log("ERROR", errorCounter++);
-    } catch (error) {
-        console.clear();
+    } catch (error) {}
+};
+
+const posibleChangeInYBlocks = () => {
+    let nowcanvasSizeY = Math.ceil(
+        window.innerHeight / (window.innerWidth / canvasSizeX)
+    );
+
+    if (nowcanvasSizeY > canvasSizeY) {
+        console.log("IN---------------------------------");
+        for (let i = canvasSizeY; i < nowcanvasSizeY; i++) {
+            for (let j = 0; j < canvasSizeX; j++) {
+                const addBlock = document.createElement("div");
+                addBlock.style.background = "rgba(0, 0, 0, 0)";
+                canvas.appendChild(addBlock);
+            }
+        }
+        defineBlocks(
+            canvasSizeX * (canvasSizeY + spreadRadius),
+            canvasSizeX * (nowcanvasSizeY + spreadRadius)
+        );
+        canvasSizeY = nowcanvasSizeY;
     }
 };
 
 const checkHightBlocks = () => {
     console.log("Change tab size");
 
-    let nowNumberYblocks = Math.ceil(
-        window.innerHeight / (window.innerWidth / canvasSizeX)
-    );
-
-    if (nowNumberYblocks > numberYblocks) {
-        console.log("IN---------------------------------");
-        for (let i = numberYblocks; i < nowNumberYblocks; i++) {
-            for (let j = 0; j < canvasSizeX; j++) {
-                const addBlock = document.createElement("div");
-                // addBlock.textContent = i; // toggle numbers
-                addBlock.style.background = "rgba(0, 0, 0, 0)";
-                canvas.appendChild(addBlock);
-            }
-        }
-        // Temp
-        // try {
-        //     blocks = document.querySelectorAll("#painting-canvas div");
-
-        //     console.clear();
-        //     console.log(canvasSizeX * (canvasSizeY + spreadRadius));
-
-        //     for (
-        //         let i = canvasSizeX * (numberYblocks + spreadRadius);
-        //         i < canvasSizeX * (nowNumberYblocks + spreadRadius);
-        //         i++
-        //     ) {
-        //         if (i < canvasSizeX * spreadRadius) {
-        //             blocks[i].style.display = "none";
-        //         } else {
-        //             if (!blocks[i].hasEventListener) {
-        //                 console.log("IN");
-        //                 // blocks[i].removeEventListener("click", blockClickHandler);
-        //                 blocks[i].addEventListener("click", () =>
-        //                     blockClickHandler(i)
-        //                 );
-        //             }
-        //         }
-        //     }
-        //     console.log("ERROR", errorCounter++);
-        // } catch (error) {
-        //     console.clear();
-        // }
-        // Temp
-        defineBlocks(
-            canvasSizeX * (numberYblocks + spreadRadius),
-            canvasSizeX * (nowNumberYblocks + spreadRadius)
-        );
-        numberYblocks = nowNumberYblocks;
-    }
-    console.log("NewY", canvasSizeY);
+    posibleChangeInYBlocks();
 };
 
 window.addEventListener("resize", checkHightBlocks);
@@ -135,7 +95,6 @@ const pushToPriorityArray = (value, i) => {
 
 const setPriorityArray = () => {
     priorityArray = [];
-    console.log("EMPTY:", priorityArray.length);
     for (let direction = -1; direction <= 1; direction += 2) {
         let MaxPriority = spreadRadius + 1;
         for (let i = 0; i <= spreadRadius + 1; i++) {
@@ -150,32 +109,25 @@ const setPriorityArray = () => {
             MaxPriority--;
         }
     }
-    console.log("Full:", priorityArray.length);
-
-    // console.log(priorityArray);
 };
 
 const createGround = () => {
     canvas.innerHTML = "";
 
-    console.log("IMP:", canvasSizeX, canvasSizeY, spreadRadius);
     for (let i = 0; i < canvasSizeX * (canvasSizeY + spreadRadius); i++) {
         const addBlock = document.createElement("div");
-        // addBlock.textContent = i; // toggle numbers
         addBlock.style.background = "rgba(0, 0, 0, 0)";
         canvas.appendChild(addBlock);
     }
 
-    defineBlocks(0, canvasSizeX * (numberYblocks + spreadRadius));
+    defineBlocks(0, canvasSizeX * (canvasSizeY + spreadRadius));
 
     setPriorityArray();
 };
 
 createGround();
 
-// console.log(priorityArray);
 const spreadColor = (target) => {
-    let numCounter = 0;
     let blockCounter = 0;
     let spreadRowSum = 0;
     for (let direction = -1; direction <= 1; direction += 2) {
@@ -183,7 +135,6 @@ const spreadColor = (target) => {
             let spreadRow = Math.trunc(
                 (target + i * canvasSizeX * direction) / canvasSizeX
             );
-            // console.log(spreadRow);
             for (let j = i; j < spreadRadius * 2 + 1 - i; j++) {
                 const blockAdrs =
                     target - spreadRadius + j - i * canvasSizeX * direction;
@@ -195,8 +146,6 @@ const spreadColor = (target) => {
                             blockBackground.lastIndexOf(")")
                         )
                     );
-                    // console.log(blockAdrs, blockAlphaValue);
-                    // console.log(Math.trunc(blockAdrs / canvasSizeX), spreadRow);
                     if (!spreadRowSum) {
                         spreadRowSum = spreadRow * 2;
                     }
@@ -220,12 +169,9 @@ const spreadColor = (target) => {
                         //     priorityArray[blockCounter] + blockAlphaValue
                         // );
                     }
-
-                    // blockCounter++;
                 } catch (error) {}
                 blockCounter++;
             }
-            // console.log("NEXT");
         }
     }
 };
@@ -271,6 +217,7 @@ canvasColorInput.value = "#e83e3e";
 spreadRadiusInput.max = canvasSizeXInput.value / 2;
 spreadRadiusInput.value = spreadRadius;
 spreadRadiusValue.value = spreadRadius;
+showBordersInput.checked = true;
 
 const hexToRgb = (hex) =>
     hex
@@ -300,8 +247,16 @@ applySetting.addEventListener("click", () => {
         `repeat(${canvasSizeX}, 1fr)`
     );
     spreadRadius = Number(spreadRadiusInput.value);
+    showNumbers = showNumbersInput.checked;
+    blockCounter = 0;
     createGround();
     colorRGB = hexToRgb(canvasColorInput.value);
+    posibleChangeInYBlocks();
+    if (showBordersInput.checked) {
+        canvas.classList.add("show-borders");
+    } else {
+        canvas.classList.remove("show-borders");
+    }
 });
 
 spreadRadiusInput.addEventListener("input", () => {
