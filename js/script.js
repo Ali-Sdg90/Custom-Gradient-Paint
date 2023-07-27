@@ -28,19 +28,24 @@ const blockClickHandler = (target) => {
 
 let errorCounter = 0;
 
-const defineBlocks = () => {
+const defineBlocks = (startPoint, endPoint) => {
     try {
         blocks = document.querySelectorAll("#painting-canvas div");
 
         console.clear();
         console.log(canvasSizeX * (canvasSizeY + spreadRadius));
 
-        for (let i = 0; i < canvasSizeX * (numberYblocks + spreadRadius); i++) {
+        for (let i = startPoint; i < endPoint; i++) {
             if (i < canvasSizeX * spreadRadius) {
                 blocks[i].style.display = "none";
             } else {
-                blocks[i].removeEventListener("click", blockClickHandler);
-                blocks[i].addEventListener("click", () => blockClickHandler(i));
+                if (!blocks[i].hasEventListener) {
+                    console.log("IN");
+                    // blocks[i].removeEventListener("click", blockClickHandler);
+                    blocks[i].addEventListener("click", () =>
+                        blockClickHandler(i)
+                    );
+                }
             }
         }
         console.log("ERROR", errorCounter++);
@@ -66,8 +71,40 @@ const checkHightBlocks = () => {
                 canvas.appendChild(addBlock);
             }
         }
+        // Temp
+        // try {
+        //     blocks = document.querySelectorAll("#painting-canvas div");
+
+        //     console.clear();
+        //     console.log(canvasSizeX * (canvasSizeY + spreadRadius));
+
+        //     for (
+        //         let i = canvasSizeX * (numberYblocks + spreadRadius);
+        //         i < canvasSizeX * (nowNumberYblocks + spreadRadius);
+        //         i++
+        //     ) {
+        //         if (i < canvasSizeX * spreadRadius) {
+        //             blocks[i].style.display = "none";
+        //         } else {
+        //             if (!blocks[i].hasEventListener) {
+        //                 console.log("IN");
+        //                 // blocks[i].removeEventListener("click", blockClickHandler);
+        //                 blocks[i].addEventListener("click", () =>
+        //                     blockClickHandler(i)
+        //                 );
+        //             }
+        //         }
+        //     }
+        //     console.log("ERROR", errorCounter++);
+        // } catch (error) {
+        //     console.clear();
+        // }
+        // Temp
+        defineBlocks(
+            canvasSizeX * (numberYblocks + spreadRadius),
+            canvasSizeX * (nowNumberYblocks + spreadRadius)
+        );
         numberYblocks = nowNumberYblocks;
-        defineBlocks();
     }
     console.log("NewY", canvasSizeY);
 };
@@ -129,7 +166,7 @@ const createGround = () => {
         canvas.appendChild(addBlock);
     }
 
-    defineBlocks();
+    defineBlocks(0, canvasSizeX * (numberYblocks + spreadRadius));
 
     setPriorityArray();
 };
