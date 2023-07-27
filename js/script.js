@@ -1,44 +1,41 @@
 const canvas = document.querySelector(".painting-canvas");
-
-let spreadRadius = 4;
-let canvasSizeX = 20; // - 2 * spreadRadius;
-let colorRGB = [232, 62, 62];
-
-let showNumbers = false;
-
 let blocks = document.querySelectorAll(".painting-canvas div");
 
+let colorRGB = [232, 62, 62];
+let showNumbers = false;
 let blockCounter = 0;
 
+let spreadRadius = 8;
+let canvasSizeX = 50; // - spreadRadius;
 let canvasSizeY = Math.ceil(
     window.innerHeight / (window.innerWidth / canvasSizeX)
 );
-document.documentElement.style.setProperty(
-    "--blockSize",
-    `${100 / canvasSizeX}vw`
-);
-document.documentElement.style.setProperty(
-    "--gridTemplate",
-    `repeat(${canvasSizeX}, 1fr)`
-);
+
+const setRootValues = () => {
+    document.documentElement.style.setProperty(
+        "--blockSize",
+        `${100 / canvasSizeX}vw`
+    );
+    document.documentElement.style.setProperty(
+        "--gridTemplate",
+        `repeat(${canvasSizeX}, 1fr)`
+    );
+};
+
+setRootValues();
 
 const defineBlocks = (startPoint, endPoint) => {
-    try {
-        blocks = document.querySelectorAll(".painting-canvas div");
+    blocks = document.querySelectorAll(".painting-canvas div");
 
-        // console.clear();
-        // console.log(canvasSizeX * (canvasSizeY + spreadRadius));
-
-        for (let i = startPoint; i < endPoint; i++) {
-            if (i < canvasSizeX * spreadRadius) {
-                blocks[i].style.display = "none";
-            } else {
-                if (showNumbers) blocks[i].textContent = ++blockCounter; // toggle numbers
-                blocks[i].style.fontSize = `${30 / canvasSizeX}vw`; // toggle numbers
-                blocks[i].addEventListener("click", () => spreadColor(i));
-            }
+    for (let i = startPoint; i < endPoint; i++) {
+        if (i < canvasSizeX * spreadRadius) {
+            blocks[i].style.display = "none";
+        } else {
+            if (showNumbers) blocks[i].textContent = ++blockCounter; // toggle numbers
+            blocks[i].style.fontSize = `${30 / canvasSizeX}vw`; // toggle numbers
+            blocks[i].addEventListener("click", () => spreadColor(i));
         }
-    } catch (error) {}
+    }
 };
 
 const posibleChangeInYBlocks = () => {
@@ -47,7 +44,6 @@ const posibleChangeInYBlocks = () => {
     );
 
     if (nowcanvasSizeY > canvasSizeY) {
-        console.log("IN---------------------------------");
         for (let i = canvasSizeY; i < nowcanvasSizeY; i++) {
             for (let j = 0; j < canvasSizeX; j++) {
                 const addBlock = document.createElement("div");
@@ -63,16 +59,10 @@ const posibleChangeInYBlocks = () => {
     }
 };
 
-const checkHightBlocks = () => {
-    console.log("Change tab size");
+window.addEventListener("resize", posibleChangeInYBlocks);
+posibleChangeInYBlocks();
 
-    posibleChangeInYBlocks();
-};
-
-window.addEventListener("resize", checkHightBlocks);
-checkHightBlocks();
-
-// let rowPriority = [1, 2, 3, 4, 5 ,4, 3, 2, 1,
+// let priorityArray = [1, 2, 3, 4, 5 ,4, 3, 2, 1,
 //                       1, 2, 3, 4, 3, 2, 1,
 //                          1, 2, 3, 2, 1,
 //                             1, 2, 1,
@@ -86,11 +76,7 @@ checkHightBlocks();
 let priorityArray = [];
 
 const pushToPriorityArray = (value, i) => {
-    if (i === 0) {
-        priorityArray.push(value / 2);
-    } else {
-        priorityArray.push(value);
-    }
+    i === 0 ? priorityArray.push(value / 2) : priorityArray.push(value);
 };
 
 const setPriorityArray = () => {
@@ -159,9 +145,6 @@ const spreadColor = (target) => {
                             priorityArray[blockCounter] + blockAlphaValue
                         })`;
                         // console.log(
-                        //     "NO:",
-                        //     ++numCounter,
-                        //     ".",
                         //     priorityArray[blockCounter],
                         //     "+",
                         //     blockAlphaValue,
@@ -185,13 +168,17 @@ document.getElementById("setting-btn").addEventListener("click", function () {
     if (settingClicked++ % 2 === 0) {
         settingPage.style.transition = "opacity 0.3s";
         settingPage.style.display = "grid";
+
         setTimeout(() => {
             settingPage.style.opacity = "1";
         }, 0);
+
+        setSettings();
     } else {
         setTimeout(() => {
             settingPage.style.display = "none";
         }, 300);
+
         settingPage.style.opacity = "0";
     }
 
@@ -212,12 +199,23 @@ const showBordersInput = document.getElementById("setting__menu__show-borders");
 const showNumbersInput = document.getElementById("setting__menu__show-numbers");
 const applySetting = document.getElementById("setting__menu__apply");
 
-canvasSizeXInput.value = canvasSizeX;
-canvasColorInput.value = "#e83e3e";
-spreadRadiusInput.max = canvasSizeXInput.value / 2;
-spreadRadiusInput.value = spreadRadius;
-spreadRadiusValue.value = spreadRadius;
-showBordersInput.checked = true;
+const setSettings = () => {
+    canvasSizeXInput.value = canvasSizeX;
+
+    let hexValues = "#";
+    canvasColorInput.value = colorRGB.map((valueRGB) => {
+        const hexValue = (hexValues += valueRGB.toString(16));
+        return hexValue;
+    });
+
+    canvasColorInput.value = hexValues;
+    spreadRadiusInput.max = canvasSizeXInput.value / 2;
+    spreadRadiusInput.value = spreadRadius;
+    spreadRadiusValue.value = spreadRadius;
+    showBordersInput.checked = true;
+};
+
+setSettings();
 
 const hexToRgb = (hex) =>
     hex
@@ -230,22 +228,8 @@ const hexToRgb = (hex) =>
         .map((x) => parseInt(x, 16));
 
 applySetting.addEventListener("click", () => {
-    // console.log(canvasSizeXInput.value);
-    // console.log(`rgb(${hexToRgb(canvasColorInput.value).join(", ")})`);
-    // console.log(hexToRgb(canvasColorInput.value));
-    // console.log(spreadRadiusInput.value);
-    // console.log(showBordersInput.checked);
-    // console.log(showNumbersInput.checked);
-
     canvasSizeX = canvasSizeXInput.value;
-    document.documentElement.style.setProperty(
-        "--blockSize",
-        `${100 / canvasSizeX}vw`
-    );
-    document.documentElement.style.setProperty(
-        "--gridTemplate",
-        `repeat(${canvasSizeX}, 1fr)`
-    );
+    setRootValues();
     spreadRadius = Number(spreadRadiusInput.value);
     showNumbers = showNumbersInput.checked;
     blockCounter = 0;
@@ -265,4 +249,8 @@ spreadRadiusInput.addEventListener("input", () => {
 
 canvasSizeXInput.addEventListener("change", () => {
     spreadRadiusInput.max = canvasSizeXInput.value / 2;
+    
+    if (spreadRadiusValue.value > canvasSizeXInput.value / 2) {
+        spreadRadiusValue.value = canvasSizeXInput.value / 2;
+    }
 });
