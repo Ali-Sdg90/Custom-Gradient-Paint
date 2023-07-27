@@ -4,6 +4,8 @@ let spreadRadius = 4;
 let canvasSizeX = 20; // - 2 * spreadRadius;
 let colorRGB = [232, 62, 62];
 
+let blocks = document.querySelectorAll("#painting-canvas div");
+
 let canvasSizeY = Math.ceil(
     window.innerHeight / (window.innerWidth / canvasSizeX)
 );
@@ -18,6 +20,34 @@ document.documentElement.style.setProperty(
     "--gridTemplate",
     `repeat(${canvasSizeX}, 1fr)`
 );
+
+const blockClickHandler = (target) => {
+    spreadColor(target);
+    console.log("CLICKKK");
+};
+
+let errorCounter = 0;
+
+const defineBlocks = () => {
+    try {
+        blocks = document.querySelectorAll("#painting-canvas div");
+
+        console.clear();
+        console.log(canvasSizeX * (canvasSizeY + spreadRadius));
+
+        for (let i = 0; i < canvasSizeX * (numberYblocks + spreadRadius); i++) {
+            if (i < canvasSizeX * spreadRadius) {
+                blocks[i].style.display = "none";
+            } else {
+                blocks[i].removeEventListener("click", blockClickHandler);
+                blocks[i].addEventListener("click", () => blockClickHandler(i));
+            }
+        }
+        console.log("ERROR", errorCounter++);
+    } catch (error) {
+        console.clear();
+    }
+};
 
 const checkHightBlocks = () => {
     console.log("Change tab size");
@@ -37,14 +67,13 @@ const checkHightBlocks = () => {
             }
         }
         numberYblocks = nowNumberYblocks;
+        defineBlocks();
     }
     console.log("NewY", canvasSizeY);
 };
 
 window.addEventListener("resize", checkHightBlocks);
 checkHightBlocks();
-
-let blocks = document.querySelectorAll("#painting-canvas div");
 
 // let rowPriority = [1, 2, 3, 4, 5 ,4, 3, 2, 1,
 //                       1, 2, 3, 4, 3, 2, 1,
@@ -61,10 +90,8 @@ let priorityArray = [];
 
 const pushToPriorityArray = (value, i) => {
     if (i === 0) {
-        // priorityArray.push((value / 2).toFixed(2));
         priorityArray.push(value / 2);
     } else {
-        // priorityArray.push(value.toFixed(2));
         priorityArray.push(value);
     }
 };
@@ -102,17 +129,8 @@ const createGround = () => {
         canvas.appendChild(addBlock);
     }
 
-    blocks = document.querySelectorAll("#painting-canvas div");
+    defineBlocks();
 
-    for (let i = 0; i < canvasSizeX * canvasSizeX; i++) {
-        if (i < canvasSizeX * spreadRadius) {
-            blocks[i].style.display = "none";
-        } else {
-            blocks[i].addEventListener("click", () => {
-                spreadColor(i);
-            });
-        }
-    }
     setPriorityArray();
 };
 
@@ -154,16 +172,16 @@ const spreadColor = (target) => {
                         }, ${colorRGB[1]}, ${colorRGB[2]}, ${
                             priorityArray[blockCounter] + blockAlphaValue
                         })`;
-                        console.log(
-                            "NO:",
-                            ++numCounter,
-                            ".",
-                            priorityArray[blockCounter],
-                            "+",
-                            blockAlphaValue,
-                            "=>",
-                            priorityArray[blockCounter] + blockAlphaValue
-                        );
+                        // console.log(
+                        //     "NO:",
+                        //     ++numCounter,
+                        //     ".",
+                        //     priorityArray[blockCounter],
+                        //     "+",
+                        //     blockAlphaValue,
+                        //     "=>",
+                        //     priorityArray[blockCounter] + blockAlphaValue
+                        // );
                     }
 
                     // blockCounter++;
