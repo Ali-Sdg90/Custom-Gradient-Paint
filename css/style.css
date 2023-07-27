@@ -9,6 +9,10 @@
   --gridTemplate: repeat(20, 1fr);
 }
 
+::selection {
+  background-color: transparent;
+}
+
 body {
   background-color: #333;
   width: 100%;
@@ -28,14 +32,9 @@ body {
   height: var(--blockSize);
   cursor: crosshair;
   transition: background-color 0.2s;
-  color: red;
-  font-size: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.painting-canvas div::selection {
-  background-color: transparent;
 }
 
 input[type=color]::-webkit-color-swatch-wrapper {
