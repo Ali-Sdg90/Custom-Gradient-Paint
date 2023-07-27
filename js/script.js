@@ -1,7 +1,7 @@
 const canvas = document.getElementById("painting-canvas");
 
-let spreadRadius = 10;
-let canvasSize = 30; // - 2 * spreadRadius;
+let spreadRadius = 4;
+let canvasSize = 20; // - 2 * spreadRadius;
 let colorRGB = [232, 62, 62];
 
 document.documentElement.style.setProperty(
@@ -15,7 +15,51 @@ document.documentElement.style.setProperty(
 
 let blocks = document.querySelectorAll("#painting-canvas div");
 
+// let rowPriority = [1, 2, 3, 4, 5 ,4, 3, 2, 1,
+//                       1, 2, 3, 4, 3, 2, 1,
+//                          1, 2, 3, 2, 1,
+//                             1, 2, 1,
+//                                1,
+//                    1, 2, 3, 4, 5 ,4, 3, 2, 1,
+//                       1, 2, 3, 4, 3, 2, 1,
+//                          1, 2, 3, 2, 1,
+//                             1, 2, 1,
+//                                1]; // for spreadRadius === 4
+
+let priorityArray = [];
+
+const pushToPriorityArray = (value, i) => {
+    if (i === 0) {
+        // priorityArray.push((value / 2).toFixed(2));
+        priorityArray.push(value / 2);
+    } else {
+        // priorityArray.push(value.toFixed(2));
+        priorityArray.push(value);
+    }
+};
+
+const setPriorityArray = () => {
+    priorityArray.length = 0;
+    console.log("EMPTY:", priorityArray.length);
+    for (let direction = -1; direction <= 1; direction += 2) {
+        let MaxPriority = spreadRadius + 1;
+        for (let i = 0; i <= spreadRadius + 1; i++) {
+            for (let j = 1; j <= MaxPriority; j++) {
+                pushToPriorityArray(j / (spreadRadius + 1), i);
+                if (j === MaxPriority) {
+                    for (let k = MaxPriority - 1; k >= 1; k--) {
+                        pushToPriorityArray(k / (spreadRadius + 1), i);
+                    }
+                }
+            }
+            MaxPriority--;
+        }
+    }
+    // console.log(priorityArray);
+};
+
 const createGround = () => {
+    canvas.innerHTML = "";
     for (let i = 0; i < canvasSize * canvasSize; i++) {
         const addBlock = document.createElement("div");
         // addBlock.textContent = i; // toggle numbers
@@ -34,44 +78,10 @@ const createGround = () => {
             });
         }
     }
+    setPriorityArray();
 };
 
 createGround();
-
-// let rowPriority = [1, 2, 3, 4, 5 ,4, 3, 2, 1,
-//                       1, 2, 3, 4, 3, 2, 1,
-//                          1, 2, 3, 2, 1,
-//                             1, 2, 1,
-//                                1,
-//                    1, 2, 3, 4, 5 ,4, 3, 2, 1,
-//                       1, 2, 3, 4, 3, 2, 1,
-//                          1, 2, 3, 2, 1,
-//                             1, 2, 1,
-//                                1]; // for spreadRadius === 4
-
-const pushToPriorityArray = (value, i) => {
-    if (i === 0) {
-        priorityArray.push(value / 2);
-    } else {
-        priorityArray.push(value);
-    }
-};
-
-let priorityArray = [];
-for (let direction = -1; direction <= 1; direction += 2) {
-    let MaxPriority = spreadRadius + 1;
-    for (let i = 0; i <= spreadRadius + 1; i++) {
-        for (let j = 1; j <= MaxPriority; j++) {
-            pushToPriorityArray(j / (spreadRadius + 1), i);
-            if (j === MaxPriority) {
-                for (let k = MaxPriority - 1; k >= 1; k--) {
-                    pushToPriorityArray(k / (spreadRadius + 1), i);
-                }
-            }
-        }
-        MaxPriority--;
-    }
-}
 
 // console.log(priorityArray);
 const spreadColor = (target) => {
@@ -95,7 +105,7 @@ const spreadColor = (target) => {
                         )
                     );
                     // console.log(blockAdrs, blockAlphaValue);
-                    console.log(Math.trunc(blockAdrs / canvasSize), spreadRow);
+                    // console.log(Math.trunc(blockAdrs / canvasSize), spreadRow);
                     if (!spreadRowSum) {
                         spreadRowSum = spreadRow * 2;
                     }
@@ -103,6 +113,12 @@ const spreadColor = (target) => {
                         Math.trunc(blockAdrs / canvasSize) + spreadRow ===
                         spreadRowSum
                     ) {
+                        // console.log(
+                        //     priorityArray[blockCounter],
+                        //     blockAlphaValue,
+                        //     "=>",
+                        //     priorityArray[blockCounter] + blockAlphaValue
+                        // );
                         blocks[blockAdrs].style.background = `rgba(${
                             colorRGB[0]
                         }, ${colorRGB[1]}, ${colorRGB[2]}, ${
@@ -114,7 +130,7 @@ const spreadColor = (target) => {
                 } catch (error) {}
                 blockCounter++;
             }
-            console.log("NEXT");
+            // console.log("NEXT");
         }
     }
 };
@@ -128,17 +144,16 @@ document.getElementById("setting-btn").addEventListener("click", function () {
     if (settingClicked++ % 2 === 0) {
         settingPage.style.transition = "opacity 0.3s";
         settingPage.style.display = "grid";
-        settingMenu.style.zIndex = "0";
         setTimeout(() => {
             settingPage.style.opacity = "1";
         }, 0);
     } else {
         setTimeout(() => {
             settingPage.style.display = "none";
-            settingMenu.style.zIndex = "3";
         }, 300);
         settingPage.style.opacity = "0";
     }
+
     document.getElementById("setting-btn").style.transform = `rotate(${
         settingClicked * 90
     }deg)`;
@@ -159,9 +174,8 @@ const applySetting = document.getElementById("setting__menu__apply");
 canvasSizeInput.value = canvasSize;
 canvasColorInput.value = "#e83e3e";
 spreadRadiusInput.max = canvasSizeInput.value / 2;
-spreadRadiusInput.value = spreadRadius
+spreadRadiusInput.value = spreadRadius;
 spreadRadiusValue.value = spreadRadius;
-
 
 const hexToRgb = (hex) =>
     hex
@@ -174,12 +188,12 @@ const hexToRgb = (hex) =>
         .map((x) => parseInt(x, 16));
 
 applySetting.addEventListener("click", () => {
-    console.log(canvasSizeInput.value);
-    console.log(`rgb(${hexToRgb(canvasColorInput.value).join(", ")})`);
-    console.log(hexToRgb(canvasColorInput.value));
-    console.log(spreadRadiusInput.value);
-    console.log(showBordersInput.checked);
-    console.log(showNumbersInput.checked);
+    // console.log(canvasSizeInput.value);
+    // console.log(`rgb(${hexToRgb(canvasColorInput.value).join(", ")})`);
+    // console.log(hexToRgb(canvasColorInput.value));
+    // console.log(spreadRadiusInput.value);
+    // console.log(showBordersInput.checked);
+    // console.log(showNumbersInput.checked);
 
     canvasSize = canvasSizeInput.value;
     document.documentElement.style.setProperty(
@@ -192,7 +206,7 @@ applySetting.addEventListener("click", () => {
     );
     createGround();
     colorRGB = hexToRgb(canvasColorInput.value);
-    spreadRadius = spreadRadiusInput.value;
+    spreadRadius = Number(spreadRadiusInput.value);
 });
 
 spreadRadiusInput.addEventListener("input", () => {
