@@ -39,7 +39,7 @@ const pushToPriorityArray = (value, i) => {
 };
 
 const setPriorityArray = () => {
-    priorityArray.length = 0;
+    priorityArray = [];
     console.log("EMPTY:", priorityArray.length);
     for (let direction = -1; direction <= 1; direction += 2) {
         let MaxPriority = spreadRadius + 1;
@@ -55,6 +55,8 @@ const setPriorityArray = () => {
             MaxPriority--;
         }
     }
+    console.log("Full:", priorityArray.length);
+
     // console.log(priorityArray);
 };
 
@@ -85,6 +87,7 @@ createGround();
 
 // console.log(priorityArray);
 const spreadColor = (target) => {
+    let numCounter = 0;
     let blockCounter = 0;
     let spreadRowSum = 0;
     for (let direction = -1; direction <= 1; direction += 2) {
@@ -113,17 +116,21 @@ const spreadColor = (target) => {
                         Math.trunc(blockAdrs / canvasSize) + spreadRow ===
                         spreadRowSum
                     ) {
-                        // console.log(
-                        //     priorityArray[blockCounter],
-                        //     blockAlphaValue,
-                        //     "=>",
-                        //     priorityArray[blockCounter] + blockAlphaValue
-                        // );
                         blocks[blockAdrs].style.background = `rgba(${
                             colorRGB[0]
                         }, ${colorRGB[1]}, ${colorRGB[2]}, ${
                             priorityArray[blockCounter] + blockAlphaValue
                         })`;
+                        console.log(
+                            "NO:",
+                            ++numCounter,
+                            ".",
+                            priorityArray[blockCounter],
+                            "+",
+                            blockAlphaValue,
+                            "=>",
+                            priorityArray[blockCounter] + blockAlphaValue
+                        );
                     }
 
                     // blockCounter++;
@@ -204,9 +211,9 @@ applySetting.addEventListener("click", () => {
         "--gridTemplate",
         `repeat(${canvasSize}, 1fr)`
     );
+    spreadRadius = Number(spreadRadiusInput.value);
     createGround();
     colorRGB = hexToRgb(canvasColorInput.value);
-    spreadRadius = Number(spreadRadiusInput.value);
 });
 
 spreadRadiusInput.addEventListener("input", () => {
