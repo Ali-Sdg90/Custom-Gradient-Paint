@@ -2,8 +2,12 @@ const canvas = document.querySelector(".painting-canvas");
 let blocks = document.querySelectorAll(".painting-canvas div");
 
 let colorRGB = [232, 62, 62];
-let showNumbers = false;
 let blockCounter = 0;
+
+let showNumbers = false;
+let mousePressed = false;
+let showBorders = true;
+let clickMode = true;
 
 let spreadRadius = 8;
 let canvasSizeX = 50; // - spreadRadius;
@@ -31,9 +35,28 @@ const defineBlocks = (startPoint, endPoint) => {
         if (i < canvasSizeX * spreadRadius) {
             blocks[i].style.display = "none";
         } else {
-            if (showNumbers) blocks[i].textContent = ++blockCounter; // toggle numbers
-            blocks[i].style.fontSize = `${30 / canvasSizeX}vw`; // toggle numbers
-            blocks[i].addEventListener("click", () => spreadColor(i));
+            if (showNumbers) {
+                blocks[i].textContent = ++blockCounter;
+                blocks[i].style.fontSize = `${30 / canvasSizeX}vw`;
+            }
+
+            if (clickMode) {
+                blocks[i].addEventListener("click", () => spreadColor(i));
+            } else {
+                blocks[i].addEventListener(
+                    "mousedown",
+                    () => (mousePressed = true)
+                );
+                blocks[i].addEventListener(
+                    "mouseup",
+                    () => (mousePressed = false)
+                );
+                blocks[i].addEventListener("mousemove", () => {
+                    if (mousePressed) {
+                        spreadColor(i);
+                    }
+                });
+            }
         }
     }
 };
@@ -197,6 +220,8 @@ const spreadRadiusValue = document.getElementById(
 );
 const showBordersInput = document.getElementById("setting__menu__show-borders");
 const showNumbersInput = document.getElementById("setting__menu__show-numbers");
+const clickModeInput = document.getElementById("setting__menu__mode__click");
+const dragModeInput = document.getElementById("setting__menu__mode__drag");
 const applySetting = document.getElementById("setting__menu__apply");
 
 const setSettings = () => {
@@ -212,10 +237,23 @@ const setSettings = () => {
     spreadRadiusInput.max = canvasSizeXInput.value / 2;
     spreadRadiusInput.value = spreadRadius;
     spreadRadiusValue.value = spreadRadius;
-    showBordersInput.checked = true;
+    showBordersInput.checked = showBorders;
+    showNumbersInput.checked = showNumbers;
+    // console.log("setSetting =>", showNumbers);
+    clickModeInput.checked = clickMode;
+    dragModeInput.checked = !clickMode;
 };
 
 setSettings();
+
+const updateSpreadRadiusValue = (divideBy) => {
+    const setValue = Math.trunc(canvasSizeXInput.value / divideBy);
+    spreadRadiusInput.max = setValue;
+
+    if (spreadRadiusValue.value > setValue) {
+        spreadRadiusValue.value = setValue;
+    }
+};
 
 const hexToRgb = (hex) =>
     hex
@@ -228,29 +266,36 @@ const hexToRgb = (hex) =>
         .map((x) => parseInt(x, 16));
 
 applySetting.addEventListener("click", () => {
+    // console.log("setSetting - top:", showNumbers);
+
     canvasSizeX = canvasSizeXInput.value;
     setRootValues();
     spreadRadius = Number(spreadRadiusInput.value);
     showNumbers = showNumbersInput.checked;
     blockCounter = 0;
-    createGround();
     colorRGB = hexToRgb(canvasColorInput.value);
     posibleChangeInYBlocks();
-    if (showBordersInput.checked) {
-        canvas.classList.add("show-borders");
+
+    showBordersInput.checked ? (showBorders = true) : (showBorders = false);
+    showBorders
+        ? canvas.classList.add("show-borders")
+        : canvas.classList.remove("show-borders");
+
+    clickModeInput.checked ? (clickMode = true) : (clickMode = false);
+    if (clickModeInput.checked) {
+        updateSpreadRadiusValue(2);
+        clickMode = true;
     } else {
-        canvas.classList.remove("show-borders");
+        updateSpreadRadiusValue(4);
+        clickMode = false;
     }
+
+    createGround();
+    // console.log("setSetting - btm:", showNumbers);
 });
 
 spreadRadiusInput.addEventListener("input", () => {
     spreadRadiusValue.value = spreadRadiusInput.value;
 });
 
-canvasSizeXInput.addEventListener("change", () => {
-    spreadRadiusInput.max = canvasSizeXInput.value / 2;
-    
-    if (spreadRadiusValue.value > canvasSizeXInput.value / 2) {
-        spreadRadiusValue.value = canvasSizeXInput.value / 2;
-    }
-});
+canvasSizeXInput.addEventListener("change", () => updateSpreadRadiusValue(2));

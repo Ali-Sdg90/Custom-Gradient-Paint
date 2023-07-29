@@ -81,16 +81,36 @@
 
                     <!-- click or draw -->
 
-                    <!-- <div>
-                        <label for="setting__menu__show-numbers"
-                            >Show Numbers :</label
-                        >
-                        <input
-                            type="checkbox"
-                            name="setting__menu__show-numbers"
-                            id="setting__menu__show-numbers"
-                        />
-                    </div> -->
+                    <div>
+                        <span> Interaction Mode : </span>
+                        <br />
+                        <ul id="setting__menu__mode">
+                            <li>
+                                <label
+                                    for="setting__menu__mode__click"
+                                    id="setting__menu__label"
+                                    >Click to Draw</label
+                                >
+                                <input
+                                    type="radio"
+                                    name="interaction-mode"
+                                    id="setting__menu__mode__click"
+                                />
+                            </li>
+                            <li>
+                                <label
+                                    for="setting__menu__mode__drag"
+                                    id="setting__menu__label"
+                                    >Drag to Draw</label
+                                >
+                                <input
+                                    type="radio"
+                                    name="interaction-mode"
+                                    id="setting__menu__mode__drag"
+                                />
+                            </li>
+                        </ul>
+                    </div>
 
                     <button id="setting__menu__apply">Apply</button>
                 </fieldset>
