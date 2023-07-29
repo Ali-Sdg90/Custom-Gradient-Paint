@@ -29,36 +29,38 @@ const setRootValues = () => {
 setRootValues();
 
 const defineBlocks = (startPoint, endPoint) => {
-    blocks = document.querySelectorAll(".painting-canvas div");
+    try {
+        blocks = document.querySelectorAll(".painting-canvas div");
 
-    for (let i = startPoint; i < endPoint; i++) {
-        if (i < canvasSizeX * spreadRadius) {
-            blocks[i].style.display = "none";
-        } else {
-            if (showNumbers) {
-                blocks[i].textContent = ++blockCounter;
-                blocks[i].style.fontSize = `${30 / canvasSizeX}vw`;
-            }
-
-            if (clickMode) {
-                blocks[i].addEventListener("click", () => spreadColor(i));
+        for (let i = startPoint; i < endPoint; i++) {
+            if (i < canvasSizeX * spreadRadius) {
+                blocks[i].style.display = "none";
             } else {
-                blocks[i].addEventListener(
-                    "mousedown",
-                    () => (mousePressed = true)
-                );
-                blocks[i].addEventListener(
-                    "mouseup",
-                    () => (mousePressed = false)
-                );
-                blocks[i].addEventListener("mousemove", () => {
-                    if (mousePressed) {
-                        spreadColor(i);
-                    }
-                });
+                if (showNumbers) {
+                    blocks[i].textContent = ++blockCounter;
+                    blocks[i].style.fontSize = `${30 / canvasSizeX}vw`;
+                }
+
+                if (clickMode) {
+                    blocks[i].addEventListener("click", () => spreadColor(i));
+                } else {
+                    blocks[i].addEventListener(
+                        "mousedown",
+                        () => (mousePressed = true)
+                    );
+                    blocks[i].addEventListener(
+                        "mouseup",
+                        () => (mousePressed = false)
+                    );
+                    blocks[i].addEventListener("mousemove", () => {
+                        if (mousePressed) {
+                            spreadColor(i);
+                        }
+                    });
+                }
             }
         }
-    }
+    } catch (error) {}
 };
 
 const posibleChangeInYBlocks = () => {
@@ -175,7 +177,9 @@ const spreadColor = (target) => {
                         //     priorityArray[blockCounter] + blockAlphaValue
                         // );
                     }
-                } catch (error) {}
+                } catch (error) {
+                    console.log("THAT ERROR");
+                }
                 blockCounter++;
             }
         }
@@ -224,22 +228,25 @@ const clickModeInput = document.getElementById("setting__menu__mode__click");
 const dragModeInput = document.getElementById("setting__menu__mode__drag");
 const applySetting = document.getElementById("setting__menu__apply");
 
+const rgbToHex = () => {
+    let hexValues = "#";
+    hexValues += colorRGB
+        .map((valueRGB) => {
+            const hexValue = valueRGB.toString(16).padStart(2, "0");
+            return hexValue;
+        })
+        .join("");
+    return hexValues;
+};
+
 const setSettings = () => {
     canvasSizeXInput.value = canvasSizeX;
-
-    let hexValues = "#";
-    canvasColorInput.value = colorRGB.map((valueRGB) => {
-        const hexValue = (hexValues += valueRGB.toString(16));
-        return hexValue;
-    });
-
-    canvasColorInput.value = hexValues;
+    canvasColorInput.value = rgbToHex();
     spreadRadiusInput.max = canvasSizeXInput.value / 2;
     spreadRadiusInput.value = spreadRadius;
     spreadRadiusValue.value = spreadRadius;
     showBordersInput.checked = showBorders;
     showNumbersInput.checked = showNumbers;
-    // console.log("setSetting =>", showNumbers);
     clickModeInput.checked = clickMode;
     dragModeInput.checked = !clickMode;
 };
@@ -255,19 +262,39 @@ const updateSpreadRadiusValue = (divideBy) => {
     }
 };
 
-const hexToRgb = (hex) =>
-    hex
-        .replace(
-            /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
-            (m, r, g, b) => "#" + r + r + g + g + b + b
-        )
+const hexToRgb = (hex) => {
+    hex.replace(
+        /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
+        (m, r, g, b) => "#" + r + r + g + g + b + b
+    )
         .substring(1)
         .match(/.{2}/g)
         .map((x) => parseInt(x, 16));
+};
+
+const canvasSizeXInputStar = document.getElementById(
+    "setting__menu__canvas-size__star"
+);
+const canvasColorInputStar = document.getElementById(
+    "setting__menu__canvas-color__star"
+);
+const spreadRadiusInputStar = document.getElementById(
+    "setting__menu__spread-radius__star"
+);
+const showBordersInputStar = document.getElementById(
+    "setting__menu__show-borders__star"
+);
+const showNumbersInputStar = document.getElementById(
+    "setting__menu__show-numbers__star"
+);
+const clickModeInputStar = document.getElementById(
+    "setting__menu__mode__click__star"
+);
+const dragModeInputStar = document.getElementById(
+    "setting__menu__mode__drag__star"
+);
 
 applySetting.addEventListener("click", () => {
-    // console.log("setSetting - top:", showNumbers);
-
     canvasSizeX = canvasSizeXInput.value;
     setRootValues();
     spreadRadius = Number(spreadRadiusInput.value);
@@ -291,11 +318,45 @@ applySetting.addEventListener("click", () => {
     }
 
     createGround();
-    // console.log("setSetting - btm:", showNumbers);
+
+    canvasSizeXInputStar.style.display = "none";
+    canvasColorInputStar.style.display = "none";
+    spreadRadiusInputStar.style.display = "none";
+    showBordersInputStar.style.display = "none";
+    showNumbersInputStar.style.display = "none";
+    clickModeInputStar.style.display = "none";
+    dragModeInputStar.style.display = "none";
 });
 
+const checkForStar = (InputVar, checkFor, starVar) => {
+    InputVar != checkFor
+        ? (starVar.style.display = "inline-block")
+        : (starVar.style.display = "none");
+};
+
+canvasSizeXInput.addEventListener("input", () => {
+    updateSpreadRadiusValue(2);
+    checkForStar(canvasSizeXInput.value, canvasSizeX, canvasSizeXInputStar);
+});
+canvasColorInput.addEventListener("input", () =>
+    checkForStar(canvasColorInput.value, colorRGB, canvasColorInputStar)
+);
 spreadRadiusInput.addEventListener("input", () => {
     spreadRadiusValue.value = spreadRadiusInput.value;
-});
 
-canvasSizeXInput.addEventListener("change", () => updateSpreadRadiusValue(2));
+    checkForStar(spreadRadiusInput.value, spreadRadius, spreadRadiusInputStar);
+});
+showBordersInput.addEventListener("input", () =>
+    checkForStar(showBordersInput.checked, showBorders, showBordersInputStar)
+);
+showNumbersInput.addEventListener("input", () =>
+    checkForStar(showNumbersInput.checked, showNumbers, showNumbersInputStar)
+);
+clickModeInput.addEventListener("input", () => {
+    checkForStar(clickModeInput.checked, clickMode, clickModeInputStar);
+    checkForStar(clickModeInput.checked, !clickMode, dragModeInputStar);
+});
+dragModeInput.addEventListener("input", () => {
+    checkForStar(clickModeInput.checked, !clickMode, clickModeInputStar);
+    checkForStar(clickModeInput.checked, clickMode, dragModeInputStar);
+});

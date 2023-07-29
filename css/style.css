@@ -99,11 +99,12 @@ input[type=color]::-webkit-color-swatch {
 }
 #setting__menu__canvas-size {
   font-size: 20px;
-  padding: 3px 4px;
+  padding: 3px 5px;
   width: 70px;
   border-radius: 5px;
   border: none;
   margin-left: 5px;
+  background-color: rgb(210, 210, 210);
 }
 #setting__menu__canvas-color {
   width: 30px;
@@ -152,8 +153,28 @@ input[type=color]::-webkit-color-swatch {
   font-size: 25px;
   border-radius: 5px;
   padding: 5px;
+  background: rgb(190, 190, 190);
+  transition: background-color 0.15s, letter-spacing 0.15s, opacity 0.15s, transform 0.15s;
+}
+#setting__menu__apply:hover {
+  letter-spacing: 0.5px;
+  background: rgb(202, 202, 202);
+}
+#setting__menu__apply:active {
+  letter-spacing: 0.25px;
+  background: rgb(186, 186, 186);
+  opacity: 0.9;
+  transform: translate(0, 1px);
 }
 
 .show-borders div {
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.setting-star {
+  color: red;
+  position: relative;
+  top: 9px;
+  left: 2px;
+  display: none;
 }/*# sourceMappingURL=style.css.map */
