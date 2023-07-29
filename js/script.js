@@ -177,9 +177,7 @@ const spreadColor = (target) => {
                         //     priorityArray[blockCounter] + blockAlphaValue
                         // );
                     }
-                } catch (error) {
-                    console.log("THAT ERROR");
-                }
+                } catch (error) {}
                 blockCounter++;
             }
         }
@@ -204,6 +202,7 @@ document.getElementById("setting-btn").addEventListener("click", function () {
     } else {
         setTimeout(() => {
             settingPage.style.display = "none";
+            hideAllStars();
         }, 300);
 
         settingPage.style.opacity = "0";
@@ -263,10 +262,11 @@ const updateSpreadRadiusValue = (divideBy) => {
 };
 
 const hexToRgb = (hex) => {
-    hex.replace(
-        /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
-        (m, r, g, b) => "#" + r + r + g + g + b + b
-    )
+    return hex
+        .replace(
+            /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
+            (r, g, b) => "#" + r + r + g + g + b + b
+        )
         .substring(1)
         .match(/.{2}/g)
         .map((x) => parseInt(x, 16));
@@ -294,6 +294,16 @@ const dragModeInputStar = document.getElementById(
     "setting__menu__mode__drag__star"
 );
 
+const hideAllStars = () => {
+    canvasSizeXInputStar.style.display = "none";
+    canvasColorInputStar.style.display = "none";
+    spreadRadiusInputStar.style.display = "none";
+    showBordersInputStar.style.display = "none";
+    showNumbersInputStar.style.display = "none";
+    clickModeInputStar.style.display = "none";
+    dragModeInputStar.style.display = "none";
+};
+
 applySetting.addEventListener("click", () => {
     canvasSizeX = canvasSizeXInput.value;
     setRootValues();
@@ -318,14 +328,7 @@ applySetting.addEventListener("click", () => {
     }
 
     createGround();
-
-    canvasSizeXInputStar.style.display = "none";
-    canvasColorInputStar.style.display = "none";
-    spreadRadiusInputStar.style.display = "none";
-    showBordersInputStar.style.display = "none";
-    showNumbersInputStar.style.display = "none";
-    clickModeInputStar.style.display = "none";
-    dragModeInputStar.style.display = "none";
+    hideAllStars();
 });
 
 const checkForStar = (InputVar, checkFor, starVar) => {
