@@ -10,143 +10,147 @@
     <body>
         <div class="painting-canvas show-borders"></div>
 
-        <abbr id="setting-btn" title="Setting">
-            <img src="Assets/setting.svg" alt="Setting-icon" />
-        </abbr>
+        <div id="setting-btn" title="Setting"> </div>
 
         <div id="setting">
             <div id="setting__menu">
                 <div>- Setting -</div>
-                <fieldset>
-                    <div>
-                        <label for="setting__menu__canvas-size"
-                            >Canvas Size :</label
-                        >
-                        <input
-                            type="number"
-                            name="setting__menu__canvas-size"
-                            id="setting__menu__canvas-size"
-                            autocomplete="off"
-                            step="1"
-                        />
-                        <span
-                            id="setting__menu__canvas-size__star"
-                            class="setting-star"
-                            >*</span
-                        >
-                    </div>
+                <form>
+                    <fieldset>
+                        <div>
+                            <label for="setting__menu__canvas-size"
+                                >Canvas Size :</label
+                            >
+                            <input
+                                type="number"
+                                name="setting__menu__canvas-size"
+                                id="setting__menu__canvas-size"
+                                autocomplete="off"
+                                step="1"
+                                min="0"
+                                max="2000"
+                            />
+                            <span
+                                id="setting__menu__canvas-size__star"
+                                class="setting-star"
+                                >*</span
+                            >
+                        </div>
 
-                    <div>
-                        <label for="setting__menu__canvas-color">Color :</label>
-                        <input
-                            type="color"
-                            name="setting__menu__canvas-color"
-                            id="setting__menu__canvas-color"
-                        />
-                        <span
-                            id="setting__menu__canvas-color__star"
-                            class="setting-star"
-                            >*</span
-                        >
-                    </div>
+                        <div>
+                            <label for="setting__menu__canvas-color"
+                                >Color :</label
+                            >
+                            <input
+                                type="color"
+                                name="setting__menu__canvas-color"
+                                id="setting__menu__canvas-color"
+                            />
+                            <span
+                                id="setting__menu__canvas-color__star"
+                                class="setting-star"
+                                >*</span
+                            >
+                        </div>
 
-                    <div>
-                        <label for="setting__menu__spread-radius"
-                            >Spread Radius :</label
-                        >
-                        <input
-                            type="range"
-                            name="setting__menu__spread-radius"
-                            id="setting__menu__spread-radius"
-                        />
-                        <input
-                            type="text"
-                            name="setting__menu__spread-radius__value"
-                            id="setting__menu__spread-radius__value"
-                            disabled
-                        />
-                        <span
-                            id="setting__menu__spread-radius__star"
-                            class="setting-star"
-                            >*</span
-                        >
-                    </div>
+                        <div>
+                            <label for="setting__menu__spread-radius"
+                                >Spread Radius :</label
+                            >
+                            <input
+                                type="range"
+                                name="setting__menu__spread-radius"
+                                id="setting__menu__spread-radius"
+                            />
+                            <input
+                                type="text"
+                                name="setting__menu__spread-radius__value"
+                                id="setting__menu__spread-radius__value"
+                                disabled
+                            />
+                            <span
+                                id="setting__menu__spread-radius__star"
+                                class="setting-star"
+                                >*</span
+                            >
+                        </div>
 
-                    <div>
-                        <label for="setting__menu__show-borders"
-                            >Show Borders :</label
-                        >
-                        <input
-                            type="checkbox"
-                            name="setting__menu__show-borders"
-                            id="setting__menu__show-borders"
-                        />
-                        <span
-                            id="setting__menu__show-borders__star"
-                            class="setting-star"
-                            >*</span
-                        >
-                    </div>
+                        <div>
+                            <label for="setting__menu__show-borders"
+                                >Show Borders :</label
+                            >
+                            <input
+                                type="checkbox"
+                                name="setting__menu__show-borders"
+                                id="setting__menu__show-borders"
+                            />
+                            <span
+                                id="setting__menu__show-borders__star"
+                                class="setting-star"
+                                >*</span
+                            >
+                        </div>
 
-                    <div>
-                        <label for="setting__menu__show-numbers"
-                            >Show Numbers :</label
-                        >
-                        <input
-                            type="checkbox"
-                            name="setting__menu__show-numbers"
-                            id="setting__menu__show-numbers"
-                        />
-                        <span
-                            id="setting__menu__show-numbers__star"
-                            class="setting-star"
-                            >*</span
-                        >
-                    </div>
+                        <div>
+                            <label for="setting__menu__show-numbers"
+                                >Show Numbers :</label
+                            >
+                            <input
+                                type="checkbox"
+                                name="setting__menu__show-numbers"
+                                id="setting__menu__show-numbers"
+                            />
+                            <span
+                                id="setting__menu__show-numbers__star"
+                                class="setting-star"
+                                >*</span
+                            >
+                        </div>
 
-                    <div>
-                        <span> Interaction Mode : </span>
-                        <br />
-                        <ul id="setting__menu__mode">
-                            <li>
-                                <label
-                                    for="setting__menu__mode__click"
-                                    id="setting__menu__label"
-                                    >Click to Draw</label
-                                >
-                                <input
-                                    type="radio"
-                                    name="interaction-mode"
-                                    id="setting__menu__mode__click"
-                                />
-                                <span
-                                    id="setting__menu__mode__click__star"
-                                    class="setting-star"
-                                    >*</span
-                                >
-                            </li>
-                            <li>
-                                <label
-                                    for="setting__menu__mode__drag"
-                                    id="setting__menu__label"
-                                    >Drag to Draw</label
-                                >
-                                <input
-                                    type="radio"
-                                    name="interaction-mode"
-                                    id="setting__menu__mode__drag"
-                                />
-                                <span
-                                    id="setting__menu__mode__drag__star"
-                                    class="setting-star"
-                                    >*</span
-                                >
-                            </li>
-                        </ul>
-                    </div>
+                        <div>
+                            <span> Interaction Mode : </span>
+                            <br />
+                            <ul id="setting__menu__mode">
+                                <li>
+                                    <label
+                                        for="setting__menu__mode__click"
+                                        id="setting__menu__label"
+                                        >Click to Draw</label
+                                    >
+                                    <input
+                                        type="radio"
+                                        name="interaction-mode"
+                                        id="setting__menu__mode__click"
+                                    />
+                                    <span
+                                        id="setting__menu__mode__click__star"
+                                        class="setting-star"
+                                        >*</span
+                                    >
+                                </li>
+                                <li>
+                                    <label
+                                        for="setting__menu__mode__drag"
+                                        id="setting__menu__label"
+                                        >Drag to Draw</label
+                                    >
+                                    <input
+                                        type="radio"
+                                        name="interaction-mode"
+                                        id="setting__menu__mode__drag"
+                                    />
+                                    <span
+                                        id="setting__menu__mode__drag__star"
+                                        class="setting-star"
+                                        >*</span
+                                    >
+                                </li>
+                            </ul>
+                        </div>
 
-                    <button id="setting__menu__apply">Apply</button>
-                </fieldset>
+                        <button id="setting__menu__apply">Apply</button>
+                    </fieldset>
+                </form>
             </div>
         </div>
         <script src="js/script.js"></script>

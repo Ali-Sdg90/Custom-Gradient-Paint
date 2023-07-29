@@ -46,10 +46,6 @@ input[type=color]::-webkit-color-swatch-wrapper {
   padding: 0;
 }
 
-input[type=color]::-webkit-color-swatch {
-  border: 1px solid lightgray;
-}
-
 #setting-btn {
   position: absolute;
   width: 50px;
@@ -59,6 +55,7 @@ input[type=color]::-webkit-color-swatch {
   cursor: pointer;
   transition: transform 0.5s;
   z-index: 2;
+  background: url("../Assets/setting.svg");
 }
 
 #setting {
@@ -177,7 +174,7 @@ input[type=color]::-webkit-color-swatch {
 }
 
 .setting-star {
-  color: red;
+  color: rgb(215, 32, 32);
   position: relative;
   top: 9px;
   left: 2px;

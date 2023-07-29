@@ -4,13 +4,13 @@ let blocks = document.querySelectorAll(".painting-canvas div");
 let colorRGB = [232, 62, 62];
 let blockCounter = 0;
 
-let showNumbers = false;
 let mousePressed = false;
+let showNumbers = false;
 let showBorders = true;
 let clickMode = true;
 
 let spreadRadius = 8;
-let canvasSizeX = 50; // - spreadRadius;
+let canvasSizeX = 50;
 let canvasSizeY = Math.ceil(
     window.innerHeight / (window.innerWidth / canvasSizeX)
 );
@@ -88,15 +88,15 @@ window.addEventListener("resize", posibleChangeInYBlocks);
 posibleChangeInYBlocks();
 
 // let priorityArray = [1, 2, 3, 4, 5 ,4, 3, 2, 1,
-//                       1, 2, 3, 4, 3, 2, 1,
-//                          1, 2, 3, 2, 1,
-//                             1, 2, 1,
-//                                1,
-//                    1, 2, 3, 4, 5 ,4, 3, 2, 1,
-//                       1, 2, 3, 4, 3, 2, 1,
-//                          1, 2, 3, 2, 1,
-//                             1, 2, 1,
-//                                1]; // for spreadRadius === 4
+//                         1, 2, 3, 4, 3, 2, 1,
+//                            1, 2, 3, 2, 1,
+//                               1, 2, 1,
+//                                  1,
+//                      1, 2, 3, 4, 5 ,4, 3, 2, 1,
+//                         1, 2, 3, 4, 3, 2, 1,
+//                            1, 2, 3, 2, 1,
+//                               1, 2, 1,
+//                                  1]; // for spreadRadius === 4
 
 let priorityArray = [];
 
@@ -238,6 +238,15 @@ const rgbToHex = () => {
     return hexValues;
 };
 
+const updateSpreadRadiusValue = (divideBy) => {
+    const setValue = Math.trunc(canvasSizeXInput.value / divideBy);
+    spreadRadiusInput.max = setValue;
+
+    if (spreadRadiusValue.value > setValue) {
+        spreadRadiusValue.value = setValue;
+    }
+};
+
 const setSettings = () => {
     canvasSizeXInput.value = canvasSizeX;
     canvasColorInput.value = rgbToHex();
@@ -248,18 +257,10 @@ const setSettings = () => {
     showNumbersInput.checked = showNumbers;
     clickModeInput.checked = clickMode;
     dragModeInput.checked = !clickMode;
+    clickMode ? updateSpreadRadiusValue(2) : updateSpreadRadiusValue(4);
 };
 
 setSettings();
-
-const updateSpreadRadiusValue = (divideBy) => {
-    const setValue = Math.trunc(canvasSizeXInput.value / divideBy);
-    spreadRadiusInput.max = setValue;
-
-    if (spreadRadiusValue.value > setValue) {
-        spreadRadiusValue.value = setValue;
-    }
-};
 
 const hexToRgb = (hex) => {
     return hex
@@ -319,13 +320,6 @@ applySetting.addEventListener("click", () => {
         : canvas.classList.remove("show-borders");
 
     clickModeInput.checked ? (clickMode = true) : (clickMode = false);
-    if (clickModeInput.checked) {
-        updateSpreadRadiusValue(2);
-        clickMode = true;
-    } else {
-        updateSpreadRadiusValue(4);
-        clickMode = false;
-    }
 
     createGround();
     hideAllStars();
@@ -346,7 +340,6 @@ canvasColorInput.addEventListener("input", () =>
 );
 spreadRadiusInput.addEventListener("input", () => {
     spreadRadiusValue.value = spreadRadiusInput.value;
-
     checkForStar(spreadRadiusInput.value, spreadRadius, spreadRadiusInputStar);
 });
 showBordersInput.addEventListener("input", () =>
@@ -358,8 +351,14 @@ showNumbersInput.addEventListener("input", () =>
 clickModeInput.addEventListener("input", () => {
     checkForStar(clickModeInput.checked, clickMode, clickModeInputStar);
     checkForStar(clickModeInput.checked, !clickMode, dragModeInputStar);
+    updateSpreadRadiusValue(2);
 });
 dragModeInput.addEventListener("input", () => {
     checkForStar(clickModeInput.checked, !clickMode, clickModeInputStar);
     checkForStar(clickModeInput.checked, clickMode, dragModeInputStar);
+    updateSpreadRadiusValue(4);
+});
+
+document.querySelector("form").addEventListener("submit", (event) => {
+    event.preventDefault();
 });
