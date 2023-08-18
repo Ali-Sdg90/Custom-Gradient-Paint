@@ -5,12 +5,13 @@ let colorRGB = [232, 62, 62];
 let blockCounter = 0;
 
 let mousePressed = false;
-let showNumbers = false;
+
+let showNumbers = true; // false
 let showBorders = true;
 let clickMode = true;
 
-let spreadRadius = 8;
-let canvasSizeX = 50;
+let spreadRadius = 4; // 8
+let canvasSizeX = 20; // 50
 let canvasSizeY = Math.ceil(
     window.innerHeight / (window.innerWidth / canvasSizeX)
 );
@@ -64,12 +65,12 @@ const defineBlocks = (startPoint, endPoint) => {
 };
 
 const posibleChangeInYBlocks = () => {
-    let nowcanvasSizeY = Math.ceil(
+    let nowCanvasSizeY = Math.ceil(
         window.innerHeight / (window.innerWidth / canvasSizeX)
     );
 
-    if (nowcanvasSizeY > canvasSizeY) {
-        for (let i = canvasSizeY; i < nowcanvasSizeY; i++) {
+    if (nowCanvasSizeY > canvasSizeY) {
+        for (let i = canvasSizeY; i < nowCanvasSizeY; i++) {
             for (let j = 0; j < canvasSizeX; j++) {
                 const addBlock = document.createElement("div");
                 addBlock.style.background = "rgba(0, 0, 0, 0)";
@@ -78,13 +79,14 @@ const posibleChangeInYBlocks = () => {
         }
         defineBlocks(
             canvasSizeX * (canvasSizeY + spreadRadius),
-            canvasSizeX * (nowcanvasSizeY + spreadRadius)
+            canvasSizeX * (nowCanvasSizeY + spreadRadius)
         );
-        canvasSizeY = nowcanvasSizeY;
+        canvasSizeY = nowCanvasSizeY;
     }
 };
 
 window.addEventListener("resize", posibleChangeInYBlocks);
+
 posibleChangeInYBlocks();
 
 // let priorityArray = [1, 2, 3, 4, 5 ,4, 3, 2, 1,
@@ -141,11 +143,13 @@ createGround();
 const spreadColor = (target) => {
     let blockCounter = 0;
     let spreadRowSum = 0;
+
     for (let direction = -1; direction <= 1; direction += 2) {
         for (let i = 0; i <= spreadRadius; i++) {
             let spreadRow = Math.trunc(
                 (target + i * canvasSizeX * direction) / canvasSizeX
             );
+            // console.log(spreadRow);
             for (let j = i; j < spreadRadius * 2 + 1 - i; j++) {
                 const blockAdrs =
                     target - spreadRadius + j - i * canvasSizeX * direction;
