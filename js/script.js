@@ -6,12 +6,12 @@ let blockCounter = 0;
 
 let mousePressed = false;
 
-let showNumbers = true; // false
+let showNumbers = false;
 let showBorders = true;
 let clickMode = true;
 
-let spreadRadius = 4; // 8
-let canvasSizeX = 20; // 50
+let spreadRadius = 8;
+let canvasSizeX = 50;
 let canvasSizeY = Math.ceil(
     window.innerHeight / (window.innerWidth / canvasSizeX)
 );
