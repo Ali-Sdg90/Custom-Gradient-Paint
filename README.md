@@ -5,6 +5,11 @@
     creativity and technology, offering a unique and immersive way to interact
     with color gradients.
 </p>
+<img
+    src="./Assets/showcase.gif"
+    alt="project showcase"
+    style="width: 100%"
+/>
 <h2>Overview</h2>
 <p>
     At the core of this project is a complex yet user-friendly interface that
