@@ -51,7 +51,7 @@
     <li>
         <p>
             <strong>Technology Stack</strong>: Built with HTML, SCSS, CSS, and
-            JavaScript, this project reflects 31 hours of dedication and
+            JavaScript, this project reflects 15 hours of dedication and
             passion. The intersection of code and artistry is evident in the
             intricacies of color gradients.
         </p>
